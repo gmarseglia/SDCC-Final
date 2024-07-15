@@ -12,7 +12,7 @@ services:
       - "55555:55555"
       - "55556:55556"
     networks:
-      sdcc-net:
+      net:
         ipv4_address: 192.168.0.2
 
   worker1:
@@ -21,14 +21,14 @@ services:
     environment:
       - MasterAddr=192.168.0.2
       - HostAddr=192.168.0.3
-      - HostPort=55560
+      - HostPort=55561
     entrypoint: worker
     ports:
-      - "55560:55560"
+      - "55561:55561"
     depends_on:
       - server
     networks:
-      sdcc-net:
+      net:
         ipv4_address: 192.168.0.3
 
   worker2:
@@ -37,14 +37,14 @@ services:
     environment:
       - MasterAddr=192.168.0.2
       - HostAddr=192.168.0.4
-      - HostPort=55561
+      - HostPort=55562
     entrypoint: worker
     ports:
-      - "55561:55561"
+      - "55562:55562"
     depends_on:
       - server
     networks:
-      sdcc-net:
+      net:
         ipv4_address: 192.168.0.4
 
   worker3:
@@ -53,14 +53,14 @@ services:
     environment:
       - MasterAddr=192.168.0.2
       - HostAddr=192.168.0.5
-      - HostPort=55562
+      - HostPort=55563
     entrypoint: worker
     ports:
-      - "55562:55562"
+      - "55563:55563"
     depends_on:
       - server
     networks:
-      sdcc-net:
+      net:
         ipv4_address: 192.168.0.5
 
   worker4:
@@ -69,33 +69,50 @@ services:
     environment:
       - MasterAddr=192.168.0.2
       - HostAddr=192.168.0.6
-      - HostPort=55563
+      - HostPort=55564
     entrypoint: worker
     ports:
-      - "55563:55563"
+      - "55564:55564"
     depends_on:
       - server
     networks:
-      sdcc-net:
+      net:
         ipv4_address: 192.168.0.6
 
-  client1:
-    # container_name: sdcc-client-composed
-    build: https://github.com/gmarseglia/SDCC-Client.git
+  worker5:
+    # container_name: sdcc-worker-composed
+    build: https://github.com/gmarseglia/SDCC-Worker.git
     environment:
-      - FrontAddr=192.168.0.2
-    entrypoint: client
+      - MasterAddr=192.168.0.2
+      - HostAddr=192.168.0.7
+      - HostPort=55565
+    entrypoint: worker
+    ports:
+      - "55565:55565"
     depends_on:
       - server
-      - worker1
-      - worker2
-      - worker3
-      - worker4
     networks:
-      sdcc-net:
+      net:
         ipv4_address: 192.168.0.7
 
-  client2:
+  worker6:
+    # container_name: sdcc-worker-composed
+    build: https://github.com/gmarseglia/SDCC-Worker.git
+    environment:
+      - MasterAddr=192.168.0.2
+      - HostAddr=192.168.0.8
+      - HostPort=55566
+    entrypoint: worker
+    ports:
+      - "55566:55566"
+    depends_on:
+      - server
+    networks:
+      net:
+        ipv4_address: 192.168.0.8
+    
+
+  client:
     # container_name: sdcc-client-composed
     build: https://github.com/gmarseglia/SDCC-Client.git
     environment:
@@ -107,12 +124,15 @@ services:
       - worker2
       - worker3
       - worker4
+      - worker5
+      - worker6
     networks:
-      sdcc-net:
-        ipv4_address: 192.168.0.8
+       - net
+    deploy:
+      replicas: 2
 
 networks:
-  sdcc-net:
+  net:
     ipam:
       driver: default
       config:
