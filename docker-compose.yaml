@@ -1,0 +1,103 @@
+version: '3'
+
+services:
+  server:
+    # container_name: sdcc-server-composed
+    build: https://github.com/gmarseglia/SDCC-Server.git
+    environment:
+      - ParallelWorkers=4
+      - ReplicationGrade=2
+    entrypoint: server
+    ports:
+      - "55555:55555"
+      - "55556:55556"
+    networks:
+      sdcc-net:
+        ipv4_address: 192.168.0.2
+
+  worker1:
+    # container_name: sdcc-worker-composed
+    build: https://github.com/gmarseglia/SDCC-Worker.git
+    environment:
+      - MasterAddr=192.168.0.2
+      - HostAddr=192.168.0.3
+      - HostPort=55560
+    entrypoint: worker
+    ports:
+      - "55560:55560"
+    depends_on:
+      - server
+    networks:
+      sdcc-net:
+        ipv4_address: 192.168.0.3
+
+  worker2:
+    # container_name: sdcc-worker-composed
+    build: https://github.com/gmarseglia/SDCC-Worker.git
+    environment:
+      - MasterAddr=192.168.0.2
+      - HostAddr=192.168.0.4
+      - HostPort=55561
+    entrypoint: worker
+    ports:
+      - "55561:55561"
+    depends_on:
+      - server
+    networks:
+      sdcc-net:
+        ipv4_address: 192.168.0.4
+
+  worker3:
+    # container_name: sdcc-worker-composed
+    build: https://github.com/gmarseglia/SDCC-Worker.git
+    environment:
+      - MasterAddr=192.168.0.2
+      - HostAddr=192.168.0.5
+      - HostPort=55562
+    entrypoint: worker
+    ports:
+      - "55562:55562"
+    depends_on:
+      - server
+    networks:
+      sdcc-net:
+        ipv4_address: 192.168.0.5
+
+  worker4:
+    # container_name: sdcc-worker-composed
+    build: https://github.com/gmarseglia/SDCC-Worker.git
+    environment:
+      - MasterAddr=192.168.0.2
+      - HostAddr=192.168.0.6
+      - HostPort=55563
+    entrypoint: worker
+    ports:
+      - "55563:55563"
+    depends_on:
+      - server
+    networks:
+      sdcc-net:
+        ipv4_address: 192.168.0.6
+
+  client:
+    # container_name: sdcc-client-composed
+    build: https://github.com/gmarseglia/SDCC-Client.git
+    environment:
+      - FrontAddr=192.168.0.2
+    entrypoint: client
+    depends_on:
+      - server
+      - worker1
+      - worker2
+      - worker3
+      - worker4
+    networks:
+      sdcc-net:
+        ipv4_address: 192.168.0.7
+
+networks:
+  sdcc-net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.0.0/24"
