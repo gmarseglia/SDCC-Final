@@ -6,9 +6,6 @@ services:
       - ParallelWorkers=4
       - ReplicationGrade=2
     entrypoint: server
-    ports:
-      - "55555:55555"
-      - "55556:55556"
     networks:
       net:
         ipv4_address: 192.170.0.2
@@ -19,10 +16,8 @@ services:
     environment:
       - MasterAddr=192.170.0.2
       - HostAddr=192.170.0.3
-      - HostPort=55561
+      - HostPort=0
     entrypoint: worker
-    ports:
-      - "55561:55561"
     depends_on:
       - server
     networks:
@@ -35,10 +30,8 @@ services:
     environment:
       - MasterAddr=192.170.0.2
       - HostAddr=192.170.0.4
-      - HostPort=55562
+      - HostPort=0
     entrypoint: worker
-    ports:
-      - "55562:55562"
     depends_on:
       - server
     networks:
@@ -51,10 +44,8 @@ services:
     environment:
       - MasterAddr=192.170.0.2
       - HostAddr=192.170.0.5
-      - HostPort=55563
+      - HostPort=0
     entrypoint: worker
-    ports:
-      - "55563:55563"
     depends_on:
       - server
     networks:
