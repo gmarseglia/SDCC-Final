@@ -79,7 +79,7 @@ services:
       sdcc-net:
         ipv4_address: 192.168.0.6
 
-  client:
+  client1:
     # container_name: sdcc-client-composed
     build: https://github.com/gmarseglia/SDCC-Client.git
     environment:
@@ -94,6 +94,22 @@ services:
     networks:
       sdcc-net:
         ipv4_address: 192.168.0.7
+
+  client2:
+    # container_name: sdcc-client-composed
+    build: https://github.com/gmarseglia/SDCC-Client.git
+    environment:
+      - FrontAddr=192.168.0.2
+    entrypoint: client
+    depends_on:
+      - server
+      - worker1
+      - worker2
+      - worker3
+      - worker4
+    networks:
+      sdcc-net:
+        ipv4_address: 192.168.0.8
 
 networks:
   sdcc-net:
