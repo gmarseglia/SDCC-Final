@@ -207,6 +207,8 @@ Mentre quello in `SDCC-Final\3-worker\docker-compose.yaml` è un ambiente con se
 
 Entrambi gli ambienti comunicano all'interno del proprio network, che è possibile controllare con `docker network ls`.
 
+Nella cartella `ec2` ci sono le istruzioni per lanciare le istanze e far produrre automaticamente le immagini.
+
 # Common 
 
 Infine nella repo https://github.com/gmarseglia/SDCC-Common c'è il codice dei protobuf e un package di utility condiviso tra server, client e worker.
